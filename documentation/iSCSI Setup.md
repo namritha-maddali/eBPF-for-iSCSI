@@ -81,4 +81,4 @@ open-iscsi (iscsiadm and iscsid) is the most common open-source methods used to 
 
 * These luns can then be mounted and used later!
 
-![iscsi setup successful!](assets/image.png)
+![iscsi setup successful!](assets/luns_init.png)
