@@ -71,7 +71,9 @@ The iSCSI connection can be tested by creating a test file on the LUN from initi
 
 * First create a mount directory and mount the iSCI LUN on the initiator. 
 * Then create a file on the mounted LUN.
+
 ![test file on initiator](assets/init_test.png)
 
 * On the target side, mount the disk image which has the new file that has been created by the initiator. The file will be available in this folder.
-![alt text](assests/target_test.png)
+
+![alt text](assets/target_test.png)
