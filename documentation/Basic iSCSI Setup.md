@@ -1,3 +1,5 @@
+> This document contains information about setting up iSCSI target and initiator on a local system without Kubernetes
+
 ## **What is iSCSI**
 iSCSI (Internet Small Computer Systems Interface) is a transport layer protocol that allows you to send SCSI* commands over TCP/IP networks, letting a computer to use storage devices over a network as if they were local disks.
 
@@ -23,7 +25,7 @@ The iSCSI target is the _storage provider_. It runs server software that exports
 * Responds to iSCSI SCSI commands (like read/write) sent over TCP/IP.
 * Ensures data integrity, access control, and performance based on configuration.
 
-Target-cli and TGT are the most common open-source methods used to set up an iSCSI target on Linux
+> Target-cli and TGT are the most common open-source methods used to set up an iSCSI target on Linux
 
 
 ### **iSCSI Initiator**
@@ -35,7 +37,7 @@ The iSCSI initiator is the _client-side component_ that connects to the target t
 * Requires initiator software, which is typically built into the OS.
 * Target-cli and TGT are the most common open-source methods used to set up an iSCSI target
 
-open-iscsi (iscsiadm and iscsid) is the most common open-source methods used to set up an iSCSI target on Linux
+> open-iscsi (iscsiadm and iscsid) is the most common open-source methods used to set up an iSCSI target on Linux
 
 ### **iSCSI setup on two virtual machines**
 
@@ -43,9 +45,9 @@ open-iscsi (iscsiadm and iscsid) is the most common open-source methods used to 
 
 * Install `target-cli` and enable on the system.
 * Ensure that the firewall is not blocking the port that is used by your target to listen for iSCSI commands.
-* Create disks for each lun present in the iscsi folder present on the target system using this command: `create disk /iscsi_luns/lun.img`
-* Next create an iqn for the target in `/iscsi/` and create luns corresponding to the previously created disks.
-* Create an iqn in the `/acls/` directory using the initiator's iqn value. This step ensures that the system is mapped to the luns
+* Create disks for each LUN present in the iscsi folder present on the target system using this command: `create disk /iscsi_luns/lun.img`
+* Next create an iqn for the target in `/iscsi/` and create LUNs corresponding to the previously created disks.
+* Create an iqn in the `/acls/` directory using the initiator's iqn value. This step ensures that the system is mapped to the LUNs
 * Set authentication of `tpg1` to 1 if required and set the `username` and `password` in the initiator iqn folder.
 * Save the configuration in the root `/` before exiting.
 
@@ -59,7 +61,17 @@ open-iscsi (iscsiadm and iscsid) is the most common open-source methods used to 
 
 ![initiator login](<assets/login_init.png>)
 
-* After successfully logging in, run the `lsblk` command to see the available luns.
-* These luns can then be mounted and used later!
+* After successfully logging in, run the `lsblk` command to see the available LUNs.
+* These LUNs can then be mounted and used later!
 
 ![iscsi setup successful!](assets/luns_init.png)
+
+## **Testing the connection**
+The iSCSI connection can be tested by creating a test file on the LUN from initiator and accessing it from target.
+
+* First create a mount directory and mount the iSCI LUN on the initiator. 
+* Then create a file on the mounted LUN.
+![test file on initiator](assets/init_test.png)
+
+* On the target side, mount the disk image which has the new file that has been created by the initiator. The file will be available in this folder.
+![alt text](assests/target_test.png)
