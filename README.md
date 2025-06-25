@@ -49,7 +49,7 @@ kubectl apply -f iscsi-pvc.yaml
 
 ---
 
-## Step 5: Visualize Metrics with Prometheus and Grafana
+## Step 5: Visualize Networking Metrics with Prometheus and Grafana
 
 ### Prometheus
 
