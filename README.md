@@ -1,6 +1,6 @@
 # eBPF-for-iSCSI
 ## Architecture Diagram
-![image](https://github.com/user-attachments/assets/a263f792-ea32-4b66-a474-c56efa1d2429)
+![architecture diagram](assets/Architecture Workflow.png)
 
 ## Prerequisites
 
