@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cilium-metrics
+  namespace: kube-system
+  labels:
+    k8s-app: cilium
+spec:
+  selector:
+    k8s-app: cilium
+  ports:
+    - name: metrics
+      port: 9962
+      targetPort: 9962
+  clusterIP: None  # Headless service for scraping DaemonSet pods individually
+

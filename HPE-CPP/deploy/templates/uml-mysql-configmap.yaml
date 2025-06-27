@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: uml-mysql-initdb-config
+data:
+  uml-schema.sql: |
+    CREATE TABLE IF NOT EXISTS diagrams (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(255),
+      content TEXT
+    );

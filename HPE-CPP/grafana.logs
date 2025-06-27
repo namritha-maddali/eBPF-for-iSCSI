@@ -1,0 +1,50 @@
+logger=resource-migrator t=2025-05-31T09:21:31.133001831Z level=info msg="Migration successfully executed" id="Add index to resource for loading" duration=1.291472ms
+logger=resource-migrator t=2025-05-31T09:21:31.244190429Z level=info msg="Executing migration" id="Add column folder in resource_history"
+logger=resource-migrator t=2025-05-31T09:21:31.248607881Z level=info msg="Migration successfully executed" id="Add column folder in resource_history" duration=4.425525ms
+logger=resource-migrator t=2025-05-31T09:21:31.254265214Z level=info msg="Executing migration" id="Add column folder in resource"
+logger=resource-migrator t=2025-05-31T09:21:31.258291346Z level=info msg="Migration successfully executed" id="Add column folder in resource" duration=4.022426ms
+logger=resource-migrator t=2025-05-31T09:21:31.326859301Z level=info msg="Executing migration" id="Migrate DeletionMarkers to real Resource objects"
+logger=deletion-marker-migrator t=2025-05-31T09:21:31.327892922Z level=info msg="finding any deletion markers"
+logger=resource-migrator t=2025-05-31T09:21:31.328244234Z level=info msg="Migration successfully executed" id="Migrate DeletionMarkers to real Resource objects" duration=1.385756ms
+logger=resource-migrator t=2025-05-31T09:21:31.333867622Z level=info msg="migrations completed" performed=23 skipped=0 duration=13.348599202s
+logger=resource-migrator t=2025-05-31T09:21:31.334236093Z level=info msg="Unlocking database"
+logger=sql-resource-server t=2025-05-31T09:21:31.334323008Z level=info msg="Using channel notifier"
+logger=plugin.store t=2025-05-31T09:21:31.944744487Z level=info msg="Loading plugins..."
+logger=plugin.store t=2025-05-31T09:21:33.265421555Z level=info msg="Plugins loaded" count=55 duration=1.320668334s
+logger=query_data t=2025-05-31T09:21:34.067265281Z level=info msg="Query Service initialization"
+logger=live.push_http t=2025-05-31T09:21:34.344521835Z level=info msg="Live Push Gateway initialization"
+logger=ngalert.notifier.alertmanager org=1 t=2025-05-31T09:21:35.656506198Z level=info msg="Applying new configuration to Alertmanager" configHash=d2c56faca6af2a5772ff4253222f7386
+logger=ngalert t=2025-05-31T09:21:36.496631491Z level=info msg="Using simple database alert instance store"
+logger=ngalert.state.manager.persist t=2025-05-31T09:21:36.496710097Z level=info msg="Using sync state persister"
+logger=ngalert.state.manager t=2025-05-31T09:21:36.496742552Z level=info msg="Running in alternative execution of Error/NoData mode"
+logger=infra.usagestats.collector t=2025-05-31T09:21:36.693872046Z level=info msg="registering usage stat providers" usageStatsProvidersLen=2
+logger=grafanaStorageLogger t=2025-05-31T09:21:36.717879354Z level=info msg="Storage starting"
+logger=plugin.backgroundinstaller t=2025-05-31T09:21:37.011491932Z level=info msg="Installing plugin" pluginId=grafana-lokiexplore-app version=
+logger=sqlstore.transactions t=2025-05-31T09:21:37.206953617Z level=info msg="Database locked, sleeping then retrying" error="database is locked" retry=0 code="database is locked"
+logger=http.server t=2025-05-31T09:21:37.210800464Z level=info msg="HTTP Server Listen" address=[::]:3000 protocol=http subUrl= socket=
+logger=ngalert.multiorg.alertmanager t=2025-05-31T09:21:37.755347761Z level=info msg="Starting MultiOrg Alertmanager"
+logger=ngalert.state.manager t=2025-05-31T09:21:36.913256408Z level=info msg="Warming state cache for startup"
+logger=provisioning.datasources t=2025-05-31T09:21:43.226177078Z level=info msg="inserting datasource from configuration" name=Prometheus uid=prometheus
+logger=ngalert.state.manager t=2025-05-31T09:21:43.45346053Z level=info msg="State cache has been initialized" states=0 duration=6.540200132s
+logger=ngalert.scheduler t=2025-05-31T09:21:43.453495696Z level=info msg="Starting scheduler" tickInterval=10s maxAttempts=3
+logger=ticker t=2025-05-31T09:21:43.453593169Z level=info msg=starting first_tick=2025-05-31T09:21:50Z
+logger=sqlstore.transactions t=2025-05-31T09:21:43.453607955Z level=info msg="Database locked, sleeping then retrying" error="database is locked" retry=0 code="database is locked"
+logger=grafana-apiserver t=2025-05-31T09:21:45.936626574Z level=info msg="Adding GroupVersion notifications.alerting.grafana.app v0alpha1 to ResourceManager"
+logger=grafana-apiserver t=2025-05-31T09:21:45.938475551Z level=info msg="Adding GroupVersion userstorage.grafana.app v0alpha1 to ResourceManager"
+logger=grafana-apiserver t=2025-05-31T09:21:45.940188915Z level=info msg="Adding GroupVersion playlist.grafana.app v0alpha1 to ResourceManager"
+logger=grafana-apiserver t=2025-05-31T09:21:46.961215368Z level=info msg="Adding GroupVersion dashboard.grafana.app v0alpha1 to ResourceManager"
+logger=grafana-apiserver t=2025-05-31T09:21:46.961875333Z level=info msg="Adding GroupVersion dashboard.grafana.app v1alpha1 to ResourceManager"
+logger=plugin.backgroundinstaller t=2025-05-31T09:21:47.106272603Z level=error msg="Failed to install plugin" pluginId=grafana-lokiexplore-app version= error="Get \"https://grafana.com/api/plugins/grafana-lokiexplore-app/versions\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"
+logger=plugin.backgroundinstaller t=2025-05-31T09:21:47.106308487Z level=info msg="Installing plugin" pluginId=grafana-pyroscope-app version=
+logger=provisioning.datasources t=2025-05-31T09:21:47.320299317Z level=info msg="inserting datasource from configuration" name=Alertmanager uid=alertmanager
+logger=sqlstore.transactions t=2025-05-31T09:21:47.419017119Z level=info msg="Database locked, sleeping then retrying" error="database is locked" retry=0 code="database is locked"
+logger=sqlstore.transactions t=2025-05-31T09:21:47.42513471Z level=info msg="Database locked, sleeping then retrying" error="database is locked" retry=0 code="database is locked"
+logger=plugin.signature.key_retriever t=2025-05-31T09:21:47.575953083Z level=error msg="Error downloading plugin manifest keys" error="Get \"https://grafana.com/api/plugins/ci/keys\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"
+logger=grafana.update.checker t=2025-05-31T09:21:49.786065981Z level=error msg="Update check failed" error="failed to get stable version from grafana.com: Get \"https://grafana.com/api/grafana/versions/stable\": net/http: TLS handshake timeout" duration=13.049231202s
+logger=grafana-apiserver t=2025-05-31T09:21:50.954572026Z level=info msg="Adding GroupVersion dashboard.grafana.app v2alpha1 to ResourceManager"
+logger=grafana-apiserver t=2025-05-31T09:21:50.956422687Z level=info msg="Adding GroupVersion featuretoggle.grafana.app v0alpha1 to ResourceManager"
+logger=sqlstore.transactions t=2025-05-31T09:21:54.258640252Z level=info msg="Database locked, sleeping then retrying" error="database is locked" retry=1 code="database is locked"
+logger=sqlstore.transactions t=2025-05-31T09:21:54.379980472Z level=info msg="Database locked, sleeping then retrying" error="database is locked" retry=1 code="database is locked"
+logger=grafana-apiserver t=2025-05-31T09:21:54.493120523Z level=info msg="Adding GroupVersion iam.grafana.app v0alpha1 to ResourceManager"
+logger=sqlstore.transactions t=2025-05-31T09:21:55.20211387Z level=info msg="Database locked, sleeping then retrying" error="database is locked" retry=0 code="database is locked"
+logger=sqlstore.transactions t=2025-05-31T09:21:55.226484522Z level=info msg="Database locked, sleeping then retrying" error="database is locked" retry=2 code="database is locked"

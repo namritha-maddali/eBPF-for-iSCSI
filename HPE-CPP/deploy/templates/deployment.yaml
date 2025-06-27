@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+
+        # Mounts the configmap with SQL
+        - name: init-sql
+          configMap:
+            name: mysql-initdb-config
+
+        # Scratch space to hold SQL before container startup
+        - name: mysql-initdb
+          emptyDir: {}
+
+      initContainers:
+        - name: init-mysql
+          image: busybox
+          command: ["sh", "-c", "cp /init/database.sql /initdb/database.sql"]
+          volumeMounts:
+            - name: init-sql
+              mountPath: /init
+            - name: mysql-initdb
+              mountPath: /initdb
+
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          env:
+            - name: MYSQL_DATABASE
+              value: {{ .Values.mysql.database }}
+            - name: MYSQL_USER
+              value: {{ .Values.mysql.user }}
+            - name: MYSQL_PASSWORD
+              value: {{ .Values.mysql.password }}
+            - name: MYSQL_ROOT_PASSWORD
+              value: {{ .Values.mysql.rootPassword }}
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+            - name: mysql-initdb
+              mountPath: /docker-entrypoint-initdb.d
+

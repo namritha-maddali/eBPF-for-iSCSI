@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: requirements-mysql-initdb-config
+data:
+  requirements-schema.sql: |
+    CREATE TABLE IF NOT EXISTS requirements (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      title VARCHAR(255),
+      description TEXT
+    );
