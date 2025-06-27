@@ -389,7 +389,7 @@ under args '- name: textfile-metrics
   readOnly: false
 ' under volumeMounts and '- name: textfile-metrics
   hostPath:
-    path: /var/lib/node_exporter/textfile_collector
+    path: /usr/local/bin/node_exporter/textfile_collector
 ' under volumes';exec bash;
 "
 kubectl edit daemonset prometheus-prometheus-node-exporter -n monitoring
