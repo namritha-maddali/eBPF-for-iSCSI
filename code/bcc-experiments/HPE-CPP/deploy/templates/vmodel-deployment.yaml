@@ -1,0 +1,62 @@
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: vmodel-visualizer-lab
+#spec:
+#  replicas: {{ .Values.vmodel.replicas }}
+#  selector:
+#    matchLabels:
+#      app: vmodel
+#  template:
+#    metadata:
+#      labels:
+#        app: vmodel
+#    spec:
+#      containers:
+#        - name: vmodel
+#          image: {{ .Values.vmodel.image }}
+#          ports:
+#            - containerPort: 5000
+#          env:
+#            - name: DATABASE_URL
+#              value: "mysql://{{ .Values.mysql.user }}:{{ .Values.mysql.password }}@mysql-service:3306/{{ .Values.mysql.database }}"
+#          volumeMounts:
+#            - name: nginx-config
+#              mountPath: /etc/nginx/conf.d/default.conf
+#              subPath: default.conf
+#      volumes:
+ #       - name: nginx-config
+ #         configMap:
+ #           name: vmodel-nginx-config
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vmodel-visualizer-lab
+spec:
+  replicas: {{ .Values.vmodel.replicas }}
+  selector:
+    matchLabels:
+      app: vmodel
+  template:
+    metadata:
+      labels:
+        app: vmodel
+    spec:
+      containers:
+        - name: vmodel
+          image: {{ .Values.vmodel.image }}
+          ports:
+            - containerPort: 5000  # Ensure the container listens on port 5000
+          env:
+            - name: DATABASE_URL
+              value: "mysql://{{ .Values.mysql.user }}:{{ .Values.mysql.password }}@mysql-service:3306/{{ .Values.mysql.database }}"
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: vmodel-nginx-config
+

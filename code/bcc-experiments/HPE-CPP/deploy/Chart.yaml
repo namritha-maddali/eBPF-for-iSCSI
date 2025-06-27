@@ -1,0 +1,4 @@
+apiVersion: v2
+name: vmodel
+description: A Helm chart for deploying vmodel-visualizer-lab and MySQL
+version: 0.1.0
