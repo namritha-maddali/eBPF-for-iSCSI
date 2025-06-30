@@ -1,9 +1,0 @@
-hubble:
-  relay:
-    peerService:
-      address: hubble-peer.kube-system.svc
-      port: 4244
-    tls:
-      client:
-        enabled: false
-

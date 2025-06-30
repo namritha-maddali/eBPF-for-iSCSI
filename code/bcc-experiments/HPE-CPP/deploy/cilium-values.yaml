@@ -1,9 +1,0 @@
-USER-SUPPLIED VALUES:
-hubble:
-  relay:
-    enabled: true
-  ui:
-    enabled: true
-image:
-  repository: quay.io/cilium/cilium
-  tag: v1.18.4

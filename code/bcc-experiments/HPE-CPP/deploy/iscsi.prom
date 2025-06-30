@@ -1,6 +1,0 @@
-# HELP iscsi_lun_read_kbps Read KB/s from iSCSI LUN
-# TYPE iscsi_lun_read_kbps gauge
-iscsi_lun_read_kbps{device="sdb"} 0.05
-# HELP iscsi_lun_write_kbps Write KB/s from iSCSI LUN
-# TYPE iscsi_lun_write_kbps gauge
-iscsi_lun_write_kbps{device="sdb"} 0.00
