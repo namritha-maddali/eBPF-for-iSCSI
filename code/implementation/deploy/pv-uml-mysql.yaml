@@ -21,7 +21,7 @@ spec:
        #       values:
         #        - vm  # Replace with your actual node name
   iscsi:
-    targetPortal: 10.10.3.111:3260           # Use the IP of your iSCSI target
+    targetPortal: 10.10.3.113:3260           # Use the IP of your iSCSI target
     iqn: iqn.2025-06.com.example:uml
     lun: 0
     fsType: ext4

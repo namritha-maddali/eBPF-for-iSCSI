@@ -28,8 +28,5 @@ tmux new-session -d -s grafana "echo 'Forwarding prometheus-grafana to localhost
 # Hubble UI
 tmux new-session -d -s hubble "echo 'Forwarding Cilium Hubble UI to localhost:12000'; kubectl -n kube-system port-forward svc/hubble-ui 12000:80"
 
-# Optional: Firefox launch (can’t use tmux meaningfully here)
-snap run firefox &
-
 echo "[INFO] All tmux sessions started. Use 'tmux ls' to view and 'tmux attach -t <name>' to interact."
 

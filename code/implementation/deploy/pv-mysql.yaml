@@ -19,5 +19,5 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - vm   # Replace with your actual node name
+                - master   # Replace with your actual node name
 

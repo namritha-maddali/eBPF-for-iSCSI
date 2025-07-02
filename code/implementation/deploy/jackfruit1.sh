@@ -7,18 +7,15 @@ echo "[INFO] Setting PS1 prompt."
 export PS1="Rashmi$\w\n"
 
 echo "========================STAGE 1: Create the LUN=================================="
-#gnome-terminal -- bash -c "echo 'STAGE 1: Create the LUN'; source /home/user/Downloads/HPE-CPP/LUN.sh;"
-#source /home/user/Downloads/HPE-CPP/LUN.sh
-# Start an interactive tmux session and pause the main script until it's done
 
 tmux new-session -d -s stage1 "bash -c 'echo STAGE 1: Create the LUN; source /home/user/Downloads/HPE-CPP/LUN.sh; read -p \"Press Enter to close this window...\"'"
 tmux attach -t stage1
 
-#sleep 30 
-
 echo "==========================STAGE 2: Clear all previous traces of k8s==================" 
 echo "Uninstall that version on helm"
 helm uninstall vmodel -n vmodel-lab
+helm uninstall cilium -n kube-system
+helm uninstall prometheus -n monitoring
 
 echo "[INFO] Resetting Kubernetes cluster."
 sudo kubeadm reset -f
@@ -29,9 +26,6 @@ sudo rm -rf /etc/cni/net.d
 
 echo "[INFO] Deleting cni0 network link."
 sudo ip link delete cni0
-
-echo "[INFO] Deleting flannel.1 network link."
-sudo ip link delete flannel.1
 
 echo "[INFO] Stopping kubelet service."
 sudo systemctl stop kubelet
@@ -77,14 +71,6 @@ sudo systemctl restart kubelet
 echo "[INFO] Initializing Kubernetes cluster with Cilium network."
 sudo kubeadm init --pod-network-cidr=10.0.0.0/16
 
-#sleep 15
-
-#JOIN_CMD=$(sudo kubeadm token create --print-join-command)
-#echo "Before ssh: $JOIN_CMD"
-
-#echo "[INFO] Running worker setup script remotely..."
-#ssh seed@192.168.1.10 "export JOIN_CMD='$JOIN_CMD'; bash /home/seed/Downloads/HPE-CPP/deploy/worker.sh '$JOIN_CMD'"
-
 echo "[INFO] Creating .kube directory."
 mkdir -p $HOME/.kube
 
@@ -106,14 +92,11 @@ export KUBECONFIG=/etc/kubernetes/admin.conf
 echo "[INFO] Retrieving Kubernetes cluster information."
 kubectl cluster-info
 
-echo "Check if worker node joined?"
+echo "Check node status"
 kubectl get nodes
 
 echo "[INFO] Removing taints from control plane nodes."
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
-
-#echo "[INFO] Applying Flannel CNI network."
-#kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
 echo "==========================STAGE 4: Apply Cilium==========================="
 echo "[INFO] Apply Cilium CNI Network"
@@ -140,10 +123,6 @@ kubectl delete service hubble-peer -n kube-system
 kubectl delete svc cilium-envoy -n kube-system
 
 echo "restart with helm"
-#helm upgrade --install cilium cilium/cilium \
- # --namespace kube-system \
- # --set hubble.relay.enabled=true \
- # --set hubble.ui.enabled=true
 helm upgrade --install cilium cilium/cilium \
   --namespace kube-system \
   --set hubble.relay.enabled=true \
@@ -192,21 +171,6 @@ sudo chown -R 999:999 /mnt/data/mysql/mysql{1,2,3}
 echo "content in hostPaths for PV's"
 sudo ls -ld /mnt/data/mysql/mysql{1,2,3}
 
-echo "Trying to mount iSCSI LUN"
-echo "[INFO] Discovering and logging into iSCSI LUN target"
-sudo iscsiadm -m discovery -t sendtargets -p 10.10.3.111
-sudo iscsiadm -m node --login
-#sleep 5
-#sudo mount /dev/sdb /mnt/data/mysql/mysql1
-
-echo "Clear LUN data before mounting"
-sudo mkdir -p /mnt/temp_lun
-sudo mount /dev/sdc /mnt/temp_lun
-sudo rm -rf /mnt/temp_lun/*
-sudo rm -rf /mnt/temp_lun/.* 2>/dev/null || true
-sudo ls -la /mnt/temp_lun
-sudo umount /mnt/temp_lun
-
 echo "Create storage-classes"
 kubectl apply -f standard-requirements-sc.yaml -n vmodel-lab
 kubectl apply -f standard-sc.yaml -n vmodel-lab
@@ -240,6 +204,9 @@ kubectl get pods -n vmodel-lab
 
 echo "List the services"
 kubectl get svc -n vmodel-lab
+
+echo "Deploying a pod to read from the LUN..."
+kubectl apply -f uml-reader.yaml -n vmodel-lab
 
 echo "Waiting to setup worker node"
 sleep 15
@@ -321,12 +288,14 @@ sudo service cron start
 sudo systemctl enable cron
 
 echo "then add * * * * * /usr/local/bin/iscsi_metrics.sh"
-sleep 20
+sleep 15
 sudo crontab -e
 
 echo "Check whether it worked"
 sudo /usr/local/bin/iscsi_metrics.sh
 cat /usr/local/bin/node_exporter/textfile_collector/iscsi.prom
+
+sleep 5
 
 echo "Use this to create service 'Save this file as /etc/systemd/system/iscsi_bcc.service
 [Unit]
@@ -352,11 +321,6 @@ echo "Check output:"
 cat /usr/local/bin/node_exporter/textfile_collector/iscsi_metrics.prom
 
 echo "---------STAGE 6: Set up Prometheus and Grafana------------------"
-echo "Pulling required images for Prometheus and Grafana"
-docker pull registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.5.2
-docker pull quay.io/kiwigrid/k8s-sidecar:1.30.0
-docker pull grafana/grafana:11.6.0
-docker pull quay.io/prometheus-operator/prometheus-config-reloader:v0.81.0
 
 echo "Create namespace monitoring"
 kubectl create namespace monitoring
@@ -378,23 +342,25 @@ echo "Grafana's admin password:"
 kubectl --namespace monitoring get secrets prometheus-grafana -o jsonpath="{.data.admin-password}" | base64 -d ; echo
 
 echo "Wait for all pods to come up"
-sleep 120
+sleep 30
 
 echo "Restart core-DNS just in case..."
 kubectl delete pod -n kube-system -l k8s-app=kube-dns
 
-gnome-terminal -- bash -c "echo '[PATCH] Change uml-backend deployment';echo 'need to add - --collector.textfile.directory=/textfile-collector
+echo "[PATCH] Change uml-backend deployment need to add 
+'- --collector.textfile.directory=/textfile-collector'
 under args '- name: textfile-metrics
   mountPath: /textfile-collector
   readOnly: false
 ' under volumeMounts and '- name: textfile-metrics
   hostPath:
     path: /usr/local/bin/node_exporter/textfile_collector
-' under volumes';exec bash;
-"
+' under volumes"
+
 kubectl edit daemonset prometheus-prometheus-node-exporter -n monitoring
 
-gnome-terminal -- bash -c "echo '[PATCH] edit uml-mysql after it loads fully';echo 'use uml;
+echo "[PATCH] edit uml-mysql after it loads fully '
+use uml;
 ALTER TABLE diagrams ADD COLUMN user_id VARCHAR(255);
 ALTER TABLE diagrams
   CHANGE COLUMN name title VARCHAR(255);
@@ -404,7 +370,8 @@ ALTER TABLE diagrams
     MODIFY COLUMN content TEXT,
     MODIFY COLUMN user_id VARCHAR(255);
 ALTER TABLE diagrams ADD COLUMN uml_syntax TEXT;
-';export KUBECONFIG=/etc/kubernetes/admin.conf;kubectl get pods -n vmodel-lab;exec bash;"
+exit;
+'"
 
 echo "Final check:"
 kubectl get pods -A
@@ -426,3 +393,7 @@ echo "[INFO] for Grafana: To add datasource use 'http://prometheus-kube-promethe
 
 echo "Finally port-forward all services"
 source /home/user/Downloads/HPE-CPP/deploy/port-forward1.sh
+
+echo "Check if all services port-forwarded"
+tmux ls
+
